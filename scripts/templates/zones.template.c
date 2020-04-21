@@ -1,4 +1,5 @@
 #include "zones.h"
+#include <stdio.h>
 
 typedef struct {
   const char *name;
@@ -39,10 +40,10 @@ const char *micro_tz_db_get_posix_str(const char *name) {
   int lo = 0, hi = sizeof(micro_tz_db_tzs) / sizeof(micro_tz_db_pair);
   while (lo < hi) {
     int mid = (lo + hi) / 2;
-    const char * mid_name = micro_tz_db_tzs[mid].name;
-    int comparison = tz_name_cmp(name, mid_name);
+    micro_tz_db_pair mid_pair = micro_tz_db_tzs[mid];
+    int comparison = tz_name_cmp(name, mid_pair.name);
     if (comparison == 0) {
-      return mid_name;
+      return mid_pair.posix_str;
     } else if (comparison < 0) {
       hi = mid;
     } else {
