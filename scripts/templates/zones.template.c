@@ -32,7 +32,7 @@ static int tz_name_cmp(const char * target, const char * other) {
   char true_target = *target == '_' ? '\0' : *target;
   char true_other = *other == '_' ? '\0' : *other;
 
- 	return true_target - true_other;
+  return true_target - true_other;
 }
 
 const char *micro_tz_db_get_posix_str(const char *name) {
