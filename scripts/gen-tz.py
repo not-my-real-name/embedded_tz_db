@@ -6,6 +6,7 @@ import json
 import re
 
 ZONES_DIR = "/usr/share/zoneinfo/"
+C_TEMPLATE_DECLARATION = "//! Declaration goes here!"
 ZONES = [
     "Africa/Abidjan",
     "Africa/Accra",
@@ -432,41 +433,6 @@ ZONES = [
     "Pacific/Tongatapu",
     "Pacific/Wake",
     "Pacific/Wallis",
-    "Etc/GMT",
-    "Etc/GMT-0",
-    "Etc/GMT-1",
-    "Etc/GMT-2",
-    "Etc/GMT-3",
-    "Etc/GMT-4",
-    "Etc/GMT-5",
-    "Etc/GMT-6",
-    "Etc/GMT-7",
-    "Etc/GMT-8",
-    "Etc/GMT-9",
-    "Etc/GMT-10",
-    "Etc/GMT-11",
-    "Etc/GMT-12",
-    "Etc/GMT-13",
-    "Etc/GMT-14",
-    "Etc/GMT0",
-    "Etc/GMT+0",
-    "Etc/GMT+1",
-    "Etc/GMT+2",
-    "Etc/GMT+3",
-    "Etc/GMT+4",
-    "Etc/GMT+5",
-    "Etc/GMT+6",
-    "Etc/GMT+7",
-    "Etc/GMT+8",
-    "Etc/GMT+9",
-    "Etc/GMT+10",
-    "Etc/GMT+11",
-    "Etc/GMT+12",
-    "Etc/UCT",
-    "Etc/UTC",
-    "Etc/Greenwich",
-    "Etc/Universal",
-    "Etc/Zulu"
 ]
 
 
@@ -489,20 +455,29 @@ def print_csv(timezones_dict):
 
 
 def print_json(timezones_dict):
-    json.dump(timezones_dict, sys.stdout, indent=0, sort_keys=True, separators=(",", ":"))
+    json.dump(
+        timezones_dict, sys.stdout, indent=0, sort_keys=True, separators=(",", ":")
+    )
 
 
 def print_embedded(timezones_dict):
+    pairs = [
+        '\n  {"%s", "%s"}' % (name, posix_str)
+        for name, posix_str in timezones_dict.items()
+    ]
+    declaration = "static const micro_tz_db_pair micro_tz_db_tzs[%s] = {%s\n};" % (
+        len(pairs),
+        ",".join(pairs),
+    )
     with open("templates/zones.template.c") as template:
-        print(template.read())
-    pairs = ['\n  {"%s", "%s"}' % (name, posix_str)
-             for name, posix_str in timezones_dict.items()]
-    print("\nstatic const posix_tz_db_pair posix_tz_db_tzs[] = {%s\n};" % 
-          ",".join(pairs))
+        template_c = template.read()
+    print(template_c.replace(C_TEMPLATE_DECLARATION, declaration))
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Generates POSIX timezones strings reading data from " + ZONES_DIR)
+    parser = argparse.ArgumentParser(
+        description="Generates POSIX timezones strings reading data from " + ZONES_DIR
+    )
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument("-j", "--json", action="store_true", help="outputs JSON")
     group.add_argument("-c", "--csv", action="store_true", help="outputs CSV")

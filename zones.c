@@ -1,25 +1,12 @@
 #include "zones.h"
-#include <string.h>
+#include <stdio.h>
 
 typedef struct {
   const char *name;
   const char *posix_str;
-} posix_tz_db_pair;
+} micro_tz_db_pair;
 
-static const posix_tz_db_pair posix_tz_db_tzs[];
-
-const char *posix_tz_db_get_posix_str(const char *name) {
-  const posix_tz_db_pair *pair = posix_tz_db_tzs;
-  while (pair->name) {
-    if (0 == strcmp(pair->name, name)) {
-      return pair->posix_str;
-    }
-    pair++;
-  }
-  return NULL;
-}
-
-static const posix_tz_db_pair posix_tz_db_tzs[] = {
+static const micro_tz_db_pair micro_tz_db_tzs[425] = {
   {"Africa/Abidjan", "GMT0"},
   {"Africa/Accra", "GMT0"},
   {"Africa/Addis_Ababa", "EAT-3"},
@@ -444,40 +431,49 @@ static const posix_tz_db_pair posix_tz_db_tzs[] = {
   {"Pacific/Tarawa", "<+12>-12"},
   {"Pacific/Tongatapu", "<+13>-13"},
   {"Pacific/Wake", "<+12>-12"},
-  {"Pacific/Wallis", "<+12>-12"},
-  {"Etc/GMT", "GMT0"},
-  {"Etc/GMT-0", "GMT0"},
-  {"Etc/GMT-1", "<+01>-1"},
-  {"Etc/GMT-2", "<+02>-2"},
-  {"Etc/GMT-3", "<+03>-3"},
-  {"Etc/GMT-4", "<+04>-4"},
-  {"Etc/GMT-5", "<+05>-5"},
-  {"Etc/GMT-6", "<+06>-6"},
-  {"Etc/GMT-7", "<+07>-7"},
-  {"Etc/GMT-8", "<+08>-8"},
-  {"Etc/GMT-9", "<+09>-9"},
-  {"Etc/GMT-10", "<+10>-10"},
-  {"Etc/GMT-11", "<+11>-11"},
-  {"Etc/GMT-12", "<+12>-12"},
-  {"Etc/GMT-13", "<+13>-13"},
-  {"Etc/GMT-14", "<+14>-14"},
-  {"Etc/GMT0", "GMT0"},
-  {"Etc/GMT+0", "GMT0"},
-  {"Etc/GMT+1", "<-01>1"},
-  {"Etc/GMT+2", "<-02>2"},
-  {"Etc/GMT+3", "<-03>3"},
-  {"Etc/GMT+4", "<-04>4"},
-  {"Etc/GMT+5", "<-05>5"},
-  {"Etc/GMT+6", "<-06>6"},
-  {"Etc/GMT+7", "<-07>7"},
-  {"Etc/GMT+8", "<-08>8"},
-  {"Etc/GMT+9", "<-09>9"},
-  {"Etc/GMT+10", "<-10>10"},
-  {"Etc/GMT+11", "<-11>11"},
-  {"Etc/GMT+12", "<-12>12"},
-  {"Etc/UCT", "UTC0"},
-  {"Etc/UTC", "UTC0"},
-  {"Etc/Greenwich", "GMT0"},
-  {"Etc/Universal", "UTC0"},
-  {"Etc/Zulu", "UTC0"}
+  {"Pacific/Wallis", "<+12>-12"}
 };
+
+/**
+ * Basically strcmp, but accounting for spaces that have become underscores
+ * @param[in] target - the 0-terminated string on the left hand side of the comparison
+ * @param[in] other - the 0-terminated string on the right hand side of the comparison
+ * @return > 0 if target comes before other alphabetically,
+ *         ==0 if they're the same,
+ *         < 0 if other comes before target alphabetically
+ *         (we don't expect NULL arguments, but, -1 if either is NULL)
+ **/
+static int tz_name_cmp(const char * target, const char * other) {
+  if (!target || !other) {
+    return -1;
+  }
+  while (*target) {
+    if (*target != *other) {
+      break;
+    }
+    target++;
+    other++;
+  }
+
+  char true_target = *target == '_' ? '\0' : *target;
+  char true_other = *other == '_' ? '\0' : *other;
+
+ 	return true_target - true_other;
+}
+
+const char *micro_tz_db_get_posix_str(const char *name) {
+  int lo = 0, hi = sizeof(micro_tz_db_tzs) / sizeof(micro_tz_db_pair);
+  while (lo < hi) {
+    int mid = (lo + hi) / 2;
+    const char * mid_name = micro_tz_db_tzs[mid].name;
+    int comparison = tz_name_cmp(name, mid_name);
+    if (comparison == 0) {
+      return mid_name;
+    } else if (comparison < 0) {
+      hi = mid;
+    } else {
+      lo = mid + 1;
+    }
+  }
+  return NULL;
+}

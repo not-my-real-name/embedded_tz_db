@@ -16,9 +16,9 @@ void print_local_time(const char *name) {
   time(&now);
   struct tm timeinfo;
   char strftime_buf[64];
-  
-  const char * posix_str = posix_tz_db_get_posix_str(name);
-  
+
+  const char * posix_str = micro_tz_db_get_posix_str(name);
+
   if (posix_str) {
     setenv("TZ", posix_str, 1);
     tzset();
@@ -29,7 +29,6 @@ void print_local_time(const char *name) {
   } else {
     printf("%s is not a known timezone!\n", name);
   }
-  
 }
 
 int main() {
