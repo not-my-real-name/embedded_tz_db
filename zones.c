@@ -1,5 +1,6 @@
 #include "zones.h"
 #include <stdio.h>
+#include <ctype.h>
 
 typedef struct {
   const char *name;
@@ -449,7 +450,7 @@ static int tz_name_cmp(const char * target, const char * other) {
   }
 
   while (*target) {
-    if (*target != *other) {
+    if (tolower(*target) != tolower(*other)) {
       break;
     }
     do {
@@ -460,7 +461,7 @@ static int tz_name_cmp(const char * target, const char * other) {
     } while (*other == '_');
   }
 
-  return target - other;
+  return tolower(*target) - tolower(*other);
 }
 
 const char *micro_tz_db_get_posix_str(const char *name) {
