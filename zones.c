@@ -452,14 +452,15 @@ static int tz_name_cmp(const char * target, const char * other) {
     if (*target != *other) {
       break;
     }
-    target++;
-    other++;
+    do {
+      target++;
+    } while (*target == '_');
+    do {
+      other++;
+    } while (*other == '_');
   }
 
-  char true_target = *target == '_' ? '\0' : *target;
-  char true_other = *other == '_' ? '\0' : *other;
-
-  return true_target - true_other;
+  return target - other;
 }
 
 const char *micro_tz_db_get_posix_str(const char *name) {

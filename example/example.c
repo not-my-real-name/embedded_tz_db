@@ -33,6 +33,7 @@ void print_local_time(const char *name) {
 
 int main() {
   print_local_time("America/New_York");
+  print_local_time("America/Fortaleza");
   print_local_time("Asia/Shanghai");
   print_local_time("Europe/Lisbon");
   print_local_time("亚洲/武汉");
