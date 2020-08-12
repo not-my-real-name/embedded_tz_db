@@ -1,6 +1,5 @@
 #include "zones.h"
 #include <stdio.h>
-#include <ctype.h>
 
 typedef struct {
   const char *name;
@@ -435,6 +434,13 @@ static const micro_tz_db_pair micro_tz_db_tzs[425] = {
   {"Pacific/Wallis", "<+12>-12"}
 };
 
+static char lower(char start) {
+  if ('A' <= start && start <= 'Z') {
+    return start - 'A' + 'a';
+  }
+  return start;
+}
+
 /**
  * Basically strcmp, but accounting for spaces that have become underscores
  * @param[in] target - the 0-terminated string on the left hand side of the comparison
@@ -450,7 +456,7 @@ static int tz_name_cmp(const char * target, const char * other) {
   }
 
   while (*target) {
-    if (tolower(*target) != tolower(*other)) {
+    if (lower(*target) != lower(*other)) {
       break;
     }
     do {
@@ -461,7 +467,7 @@ static int tz_name_cmp(const char * target, const char * other) {
     } while (*other == '_');
   }
 
-  return tolower(*target) - tolower(*other);
+  return lower(*target) - lower(*other);
 }
 
 const char *micro_tz_db_get_posix_str(const char *name) {
