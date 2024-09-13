@@ -9,7 +9,7 @@
 #include <sys/time.h>
 #include <stdlib.h>
 
-#include "zones.h"
+#include "embedded_tz_db.h"
 
 void print_local_time(const char *name) {
   time_t now;
@@ -17,7 +17,7 @@ void print_local_time(const char *name) {
   struct tm timeinfo;
   char strftime_buf[64];
 
-  const char * posix_str = micro_tz_db_get_posix_str(name);
+  const char * posix_str = tz_db_get_posix_str(name);
 
   if (posix_str) {
     setenv("TZ", posix_str, 1);

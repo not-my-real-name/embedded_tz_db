@@ -1,6 +1,15 @@
 MIT License
 
-Copyright (c) 2020 Jacob Lambert
+Forked and modified 2024 
+https://github.com/not-my-real-name/embedded_tz_db
+
+This project has been derived from the following libraries.
+
+https://github.com/jdlambert/micro_tz_db
+Copyright (c) 2020-2024 Jacob Lambert
+
+https://github.com/nayarsystems/posix_tz_db
+Copyright (c) 2020 Nayar Systems
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
