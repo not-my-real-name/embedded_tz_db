@@ -11,8 +11,15 @@
 extern "C" {
 #endif
 
+/** Select if the short or full timezone listing should be included */
+#define TZ_DB_USE_SHORT_LIST 1
+
+#if TZ_DB_USE_SHORT_LIST
 /** Number of time zones contained in this library */
+#define TZ_DB_NUM_ZONES (/*!!{NUM_ZONES_SHORT}*/)
+#else
 #define TZ_DB_NUM_ZONES (/*!!{NUM_ZONES}*/)
+#endif
 
 /** 
  * Timezone information structure. 

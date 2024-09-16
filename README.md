@@ -1,5 +1,5 @@
 # Embedded Timezone Database
-This library contains a minimal list of [IANA Time Zone Database](https://www.iana.org/time-zones) names
+This library contains a shortened list of [IANA Time Zone Database](https://www.iana.org/time-zones) names
 (like "America/New_York" and "China/Shanghai") and their equivalent [POSIX `"TZ"` rule descriptions](https://www.freebsd.org/cgi/man.cgi?query=tzset)
 (like "EST5EDT,M3.2.0,M11.1." and "CST-8"). This allows devices to contain a list of supported rules in firmware, and creates a list for
 supporting software tools to use when configuring them.
@@ -11,6 +11,9 @@ It gives a common set of timezones and rules to work from.
 
 All timezone information is obtained from the 'tzdata' package in linux. This means that you need to re-build a new docker image in 
 order to get update timezone information.
+
+Some output files contain the full list, and some contain the short list (or both). The intended end application of this library will show the short
+list in dropdown boxes when configuring devices but will utilise the full list to identify rules from IANA zone names remported by third party APIs.
 
 # Usage
 
