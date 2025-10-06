@@ -18,7 +18,7 @@ extern "C" {
 /** Number of time zones contained in this library */
 #define TZ_DB_NUM_ZONES (139)
 #else
-#define TZ_DB_NUM_ZONES (417)
+#define TZ_DB_NUM_ZONES (418)
 #endif
 
 /** 

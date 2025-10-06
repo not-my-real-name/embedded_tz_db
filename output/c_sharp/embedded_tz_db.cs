@@ -7,7 +7,7 @@ namespace EmbeddedTimezoneDB
 {
     public static class EmbeddedTzDB
     {
-        public static readonly string IanaTzDatabaseVersion = "2024b-2";
+        public static readonly string IanaTzDatabaseVersion = "2025b-1";
 
         /// This dictionary contains only selected timezones and their POSIX rule definitions. 
         /// It is intended as a shorter list to make it simpler to select the correct zone.
@@ -39,7 +39,7 @@ namespace EmbeddedTimezoneDB
             {"America/Havana", "CST5CDT,M3.2.0/0,M11.1.0/1"},
             {"America/Indiana/Indianapolis", "EST5EDT,M3.2.0,M11.1.0"},
             {"America/Grand_Turk", "EST5EDT,M3.2.0,M11.1.0"},
-            {"America/Asuncion", "<-04>4<-03>,M10.1.0/0,M3.4.0/0"},
+            {"America/Asuncion", "<-03>3"},
             {"America/Halifax", "AST4ADT,M3.2.0,M11.1.0"},
             {"America/Caracas", "<-04>4"},
             {"America/Cuiaba", "<-04>4"},
@@ -270,6 +270,7 @@ namespace EmbeddedTimezoneDB
             {"Africa/Abidjan", "GMT0"},
             {"Pacific/Rarotonga", "<-10>10"},
             {"America/Santiago", "<-04>4<-03>,M9.1.6/24,M4.1.6/24"},
+            {"America/Coyhaique", "<-03>3"},
             {"America/Punta_Arenas", "<-03>3"},
             {"Pacific/Easter", "<-06>6<-05>,M9.1.6/22,M4.1.6/22"},
             {"Africa/Douala", "WAT-1"},
@@ -453,7 +454,7 @@ namespace EmbeddedTimezoneDB
             {"Atlantic/Madeira", "WET0WEST,M3.5.0/1,M10.5.0"},
             {"Atlantic/Azores", "<-01>1<+00>,M3.5.0/0,M10.5.0/1"},
             {"Pacific/Palau", "<+09>-9"},
-            {"America/Asuncion", "<-04>4<-03>,M10.1.0/0,M3.4.0/0"},
+            {"America/Asuncion", "<-03>3"},
             {"Asia/Qatar", "<+03>-3"},
             {"Indian/Reunion", "<+04>-4"},
             {"Europe/Bucharest", "EET-2EEST,M3.5.0/3,M10.5.0/4"},

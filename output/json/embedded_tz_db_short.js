@@ -1,5 +1,5 @@
 //IANA time Zone database version used to generate this file.
-const embedded_tz_IanaDbVers = "2024b-2";
+const embedded_tz_IanaDbVers = "2025b-1";
 
 // Short List of selectable time zones for embedded devices
 const embedded_tz_db_short = {
@@ -18,7 +18,7 @@ const embedded_tz_db_short = {
     "America/Anchorage":"AKST9AKDT,M3.2.0,M11.1.0",
     "America/Araguaina":"<-03>3",
     "America/Argentina/Buenos_Aires":"<-03>3",
-    "America/Asuncion":"<-04>4<-03>,M10.1.0/0,M3.4.0/0",
+    "America/Asuncion":"<-03>3",
     "America/Bahia":"<-03>3",
     "America/Bogota":"<-05>5",
     "America/Cancun":"EST5",

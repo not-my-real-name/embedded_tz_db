@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "embedded_tz_db.h"
 
-static const char * TZ_DATA_VERS = "2024b-2";
+static const char * TZ_DATA_VERS = "2025b-1";
 
 #if TZ_DB_USE_SHORT_LIST
 static const embeddedTz_t embedded_tz_db_zones[139] = {
@@ -31,7 +31,7 @@ static const embeddedTz_t embedded_tz_db_zones[139] = {
   {"America/Havana", "CST5CDT,M3.2.0/0,M11.1.0/1"},
   {"America/Indiana/Indianapolis", "EST5EDT,M3.2.0,M11.1.0"},
   {"America/Grand_Turk", "EST5EDT,M3.2.0,M11.1.0"},
-  {"America/Asuncion", "<-04>4<-03>,M10.1.0/0,M3.4.0/0"},
+  {"America/Asuncion", "<-03>3"},
   {"America/Halifax", "AST4ADT,M3.2.0,M11.1.0"},
   {"America/Caracas", "<-04>4"},
   {"America/Cuiaba", "<-04>4"},
@@ -292,7 +292,7 @@ static const unsigned char embedded_tz_db_hashTable[139] = {
 };
 #else
 //Full List
-static const embeddedTz_t embedded_tz_db_zones[417] = {
+static const embeddedTz_t embedded_tz_db_zones[418] = {
   {"Europe/Andorra", "CET-1CEST,M3.5.0,M10.5.0/3"},
   {"Asia/Dubai", "<+04>-4"},
   {"Asia/Kabul", "<+0430>-4:30"},
@@ -407,6 +407,7 @@ static const embeddedTz_t embedded_tz_db_zones[417] = {
   {"Africa/Abidjan", "GMT0"},
   {"Pacific/Rarotonga", "<-10>10"},
   {"America/Santiago", "<-04>4<-03>,M9.1.6/24,M4.1.6/24"},
+  {"America/Coyhaique", "<-03>3"},
   {"America/Punta_Arenas", "<-03>3"},
   {"Pacific/Easter", "<-06>6<-05>,M9.1.6/22,M4.1.6/22"},
   {"Africa/Douala", "WAT-1"},
@@ -590,7 +591,7 @@ static const embeddedTz_t embedded_tz_db_zones[417] = {
   {"Atlantic/Madeira", "WET0WEST,M3.5.0/1,M10.5.0"},
   {"Atlantic/Azores", "<-01>1<+00>,M3.5.0/0,M10.5.0/1"},
   {"Pacific/Palau", "<+09>-9"},
-  {"America/Asuncion", "<-04>4<-03>,M10.1.0/0,M3.4.0/0"},
+  {"America/Asuncion", "<-03>3"},
   {"Asia/Qatar", "<+03>-3"},
   {"Indian/Reunion", "<+04>-4"},
   {"Europe/Bucharest", "EET-2EEST,M3.5.0/3,M10.5.0/4"},
@@ -715,7 +716,7 @@ static const embeddedTz_t embedded_tz_db_zones[417] = {
 /** This hash table allows for faster lookup of the timezone names. Timezones are not in alphabetical order. 
  *  Timezone names are converted to lower case and then summed. The 8 bit sum is stored here.
  **/
-static const unsigned char embedded_tz_db_hashTable[417] = {
+static const unsigned char embedded_tz_db_hashTable[418] = {
   166,
   210,
   220,
@@ -830,6 +831,7 @@ static const unsigned char embedded_tz_db_hashTable[417] = {
   94,
   203,
   87,
+  201,
   2,
   130,
   11,
