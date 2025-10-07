@@ -104,6 +104,7 @@ const embedded_tz_db_short = {
     "Australia/Lord_Howe":"<+1030>-10:30<+11>-11,M10.1.0,M4.1.0",
     "Australia/Perth":"AWST-8",
     "Australia/Sydney":"AEST-10AEDT,M10.1.0,M4.1.0/3",
+    "Etc/GMT":"GMT0",
     "Etc/GMT+11":"<-11>11",
     "Etc/GMT+12":"<-12>12",
     "Etc/GMT+2":"<-02>2",

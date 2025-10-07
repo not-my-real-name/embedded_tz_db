@@ -66,6 +66,7 @@ SHORT_ZONE_LIST = [
     "Etc/GMT+2",
     "Atlantic/Azores",
     "Atlantic/Cape_Verde",
+    "Etc/GMT",
     "Etc/UTC",
     "Europe/London",
     "Africa/Abidjan",
@@ -186,6 +187,20 @@ def parse_timezones(file_path):
                 timezone = columns[2]
                 timezones.append(timezone)
     return timezones
+    
+def parse_links(file_path):
+    links = []
+    with open(file_path, 'r', encoding='utf-8') as file:
+        for line in file:
+            if line.startswith('L'):
+                columns = line.split()
+                if len(columns) >= 3:
+                    # columns[1] = target zone, columns[3] = alias
+                    links.append({
+                        "zone": columns[1],
+                        "alias": columns[2]
+                    })
+    return links
 
 #The zone now file includes only the current zones. However, it has some limitations that make it unsuitable for 
 # the application of presenting timezone selection options to users. It has lots of zones omitted becuase the rule is identical.
@@ -225,7 +240,7 @@ def make_timezones_dict(zoneList):
         result[timezone] = get_tz_string(timezone)
     return result
 
-def print_csv(timezones_short, timezones_all):
+def print_csv(timezones_short, timezones_all, timezone_links):
     csv = []
     for name, tz in timezones_short.items():
         csv.append('"{}","{}"'.format(name, tz))
@@ -234,18 +249,26 @@ def print_csv(timezones_short, timezones_all):
     for name, tz in timezones_all.items():
         csv.append('"{}","{}"'.format(name, tz))
     write_file(OUTPUT_FOLDER + "csv/embedded_tz_db.csv", "\n".join(csv))
+    csv = []
+    for link in timezone_links:
+        csv.append('"{}","{}"'.format(link["alias"], link["zone"]))
+    write_file(OUTPUT_FOLDER + "csv/embedded_tz_db_links.csv", "\n".join(csv))
 
 
-def print_json(timezones_short, timezones_all):
+def print_json(timezones_short, timezones_all, timezone_links):
     json_obj_short = json.dumps(
         timezones_short, indent=4, sort_keys=True, separators=(",", ":")
     )
     json_obj = json.dumps(
         timezones_all, indent=4, sort_keys=True, separators=(",", ":")
     )
+    link_obj = json.dumps(
+        timezone_links, indent=4, separators=(",",":")
+    )
     
     write_file(OUTPUT_FOLDER + "json/embedded_tz_db_short.json", json_obj_short)
     write_file(OUTPUT_FOLDER + "json/embedded_tz_db.json", json_obj)
+    write_file(OUTPUT_FOLDER + "json/embedded_tz_db_links.json", link_obj)
     
     js = "//IANA time Zone database version used to generate this file.\n"
     js += "const embedded_tz_IanaDbVers = \"%s\";\n\n" % ( TZ_VERSION )
@@ -261,8 +284,11 @@ def print_json(timezones_short, timezones_all):
     for name, tz in timezones_short.items():
         shortNameList.append('\n    "{}"'.format(name))
     js += "const embedded_tz_db_shortNameList = [" + ",".join(shortNameList) + "\n];\n"
-    js += "\n// Complete List of IANA time zones and the associated posix rule for each\n";
-    js += "const embedded_tz_db = " + json_obj + ";"
+    js += "\n// Complete List of IANA time zones and the associated posix rule for each\n"
+    js += "const embedded_tz_db = " + json_obj + ";\n"
+    js += "\n// Links to older/deprecated time zone names.\n"
+    js += "// It is recommended to use the zone name instead of the alias if possible\n"
+    js += "const embedded_tz_db_links = " + link_obj + ";"
     write_file(OUTPUT_FOLDER + "json/embedded_tz_db.js", js)
 
 def hash_str(value):
@@ -271,7 +297,7 @@ def hash_str(value):
         strSum += ord(char.lower().replace(' ','_'))
     return strSum & 0xFF
 
-def print_embedded(timezones_short, timezones_all):
+def print_embedded(timezones_short, timezones_all, timezone_links):
     pairs = [
         '\n  {"%s", "%s"}' % (name, posix_str)
         for name, posix_str in timezones_all.items()
@@ -293,29 +319,46 @@ def print_embedded(timezones_short, timezones_all):
     declaration = "static const char * TZ_DATA_VERS = \"%s\";\n\n" % ( TZ_VERSION )
     
     declaration += "#if TZ_DB_USE_SHORT_LIST\n";
-    declaration += "static const embeddedTz_t embedded_tz_db_zones[%s] = {%s\n};\n\n" % (
-        len(pairs_short),
+    declaration += "static const embeddedTz_t embedded_tz_db_zones[TZ_DB_NUM_ZONES] = {%s\n};\n\n" % (
         ",".join(pairs_short),
     )
     declaration += "/** This hash table allows for faster lookup of the timezone names. Timezones are not in alphabetical order. \n"
     declaration += " *  Timezone names are converted to lower case and then summed. The 8 bit sum is stored here.\n **/\n"
-    declaration += "static const unsigned char embedded_tz_db_hashTable[%s] = {%s\n};\n" % (
-        len(hashTable_short),
+    declaration += "static const unsigned char embedded_tz_db_hashTable[TZ_DB_NUM_ZONES] = {%s\n};\n" % (
         ",".join(hashTable_short),
     )
     declaration += "#else\n//Full List\n";
-    declaration += "static const embeddedTz_t embedded_tz_db_zones[%s] = {%s\n};\n\n" % (
-        len(pairs),
+    declaration += "static const embeddedTz_t embedded_tz_db_zones[TZ_DB_NUM_ZONES] = {%s\n};\n\n" % (
         ",".join(pairs),
     )
     declaration += "/** This hash table allows for faster lookup of the timezone names. Timezones are not in alphabetical order. \n"
     declaration += " *  Timezone names are converted to lower case and then summed. The 8 bit sum is stored here.\n **/\n"
-    declaration += "static const unsigned char embedded_tz_db_hashTable[%s] = {%s\n};\n" % (
-        len(hashTable),
+    declaration += "static const unsigned char embedded_tz_db_hashTable[TZ_DB_NUM_ZONES] = {%s\n};\n" % (
         ",".join(hashTable),
     )
     declaration += "#endif\n";
     
+    alias_entries = []
+    zone_index_map = {name: idx for idx, name in enumerate(timezones_all.keys())}
+
+    for link in timezone_links:
+        zone = link["zone"]
+        alias = link["alias"]
+        if zone in zone_index_map:
+            index = zone_index_map[zone]
+            hash_val = hash_str(alias)
+            alias_entries.append(f'\n  {{ "{alias}", {index}, {hash_val} }}')
+        if zone not in zone_index_map:
+            print(f"Skipping alias '{alias}' → unknown zone '{zone}'")
+            continue
+            
+    declaration += "\n#if TZ_DB_INCLUDE_ALIAS_LIST\n";
+    declaration += "/** Alias table with hash values for fast lookup */\n"
+    declaration += "static const embeddedTzAlias_t embedded_tz_db_aliases[TZ_DB_NUM_ALIAS] = {%s\n};\n" % (
+        ",".join(alias_entries),
+    )
+    declaration += "#endif\n";
+
     with open(TEMPLATES_DIR + "embedded_tz_db.template.c") as template:
         template_c = template.read()
     write_file(OUTPUT_FOLDER + "c/embedded_tz_db.c", template_c.replace(C_TEMPLATE_DECLARATION, declaration))
@@ -325,9 +368,11 @@ def print_embedded(timezones_short, timezones_all):
         
     header = template_h.replace("/*!!{NUM_ZONES}*/", "%s" %(len(pairs)))
     header = header.replace("/*!!{NUM_ZONES_SHORT}*/", "%s" %(len(pairs_short)))
+    header = header.replace("/*!!{NUM_ALIAS}*/", "%s" %(len(alias_entries)))
+
     write_file(OUTPUT_FOLDER + "c/embedded_tz_db.h", header)
     
-def print_cSharp(timezones_short, timezones_all):
+def print_cSharp(timezones_short, timezones_all, timezone_links):
     csZones = [
         '\n            {"%s", "%s"}' % (name, posix_str)
         for name, posix_str in timezones_all.items()
@@ -337,16 +382,25 @@ def print_cSharp(timezones_short, timezones_all):
         '\n            {"%s", "%s"}' % (name, posix_str)
         for name, posix_str in timezones_short.items()
     ]
+    csZoneLinks = [
+        '\n            {"%s", "%s"}' % (link["alias"], link["zone"])
+        for link in timezone_links
+    ]
     
     declaration = "public static readonly string IanaTzDatabaseVersion = \"%s\";\n\n" % ( TZ_VERSION )
     declaration += "        /// This dictionary contains only selected timezones and their POSIX rule definitions. \n"
     declaration += "        /// It is intended as a shorter list to make it simpler to select the correct zone.\n"
-    declaration += "        public static Dictionary<string, string> IanaZones_short = new Dictionary<string, string>()\n        {%s\n        };\n" % (
+    declaration += "        public static Dictionary<string, string> IanaZones_short = new Dictionary<string, string>()\n        {%s\n        };\n\n" % (
         ",".join(csZonesShort),
     )
     declaration += "        /// This dictionary contains all timezones and their POSIX rule definitions.\n"
-    declaration += "        public static Dictionary<string, string> IanaZones = new Dictionary<string, string>()\n        {%s\n        };" % (
+    declaration += "        public static Dictionary<string, string> IanaZones = new Dictionary<string, string>()\n        {%s\n        };\n\n" % (
         ",".join(csZones),
+    )
+    declaration += "        /// This dictionary contains links between deprecated time zones (alias) and the current IANA zone name.\n"
+    declaration += "        /// The dictionary keys are the alias, and the value is the current canonical IANA zone name.\n"
+    declaration += "        public static Dictionary<string, string> IanaZoneLinks = new Dictionary<string, string>()\n        {%s\n        };\n" % (
+        ",".join(csZoneLinks),
     )
     
     with open(TEMPLATES_DIR + "embedded_tz_db.template.cs") as template:
@@ -368,18 +422,31 @@ if __name__ == "__main__":
     data = parser.parse_args()
 
     timezones_short = make_timezones_dict(SHORT_ZONE_LIST)
+    for zone in SHORT_ZONE_LIST:
+        if zone not in ALL_ZONES:
+            print(f"Manually include zone '{zone}'")
+            ALL_ZONES.append(zone)
+        
     timezones_all = make_timezones_dict(ALL_ZONES)
+    timezone_links = parse_links(ZONES_DIR + "tzdata.zi")
+    # Remove aliases that are already canonical zone names
+    canonical_zones = set(timezones_all.keys())
+    timezone_links_filtered = [
+        link for link in timezone_links
+        if link["alias"] not in canonical_zones
+    ]
+
 
     if data.all:
-        print_json(timezones_short, timezones_all)
-        print_csv(timezones_short, timezones_all)
-        print_embedded(timezones_short, timezones_all)
-        print_cSharp(timezones_short, timezones_all)
+        print_json(timezones_short, timezones_all, timezone_links_filtered)
+        print_csv(timezones_short, timezones_all, timezone_links_filtered)
+        print_embedded(timezones_short, timezones_all, timezone_links_filtered)
+        print_cSharp(timezones_short, timezones_all, timezone_links_filtered)
     if data.json:
-        print_json(timezones_short, timezones_all)
+        print_json(timezones_short, timezones_all, timezone_links_filtered)
     elif data.csv:
-        print_csv(timezones_short, timezones_all)
+        print_csv(timezones_short, timezones_all, timezone_links_filtered)
     elif data.embedded:
-        print_embedded(timezones_short, timezones_all)
+        print_embedded(timezones_short, timezones_all, timezone_links_filtered)
     elif data.csharp:
-        print_cSharp(timezones_short, timezones_all)
+        print_cSharp(timezones_short, timezones_all, timezone_links_filtered)

@@ -1,6 +1,16 @@
 #include <stdio.h>
 #include "embedded_tz_db.h"
 
+/** 
+ * Timezone alias structure 
+ * Contains IANA Zone Alias/link and an index to the associated zone.
+ **/
+typedef struct {
+    const char *alias;
+    unsigned short zoneIndex; // Index into embedded_tz_db_zones[]
+    unsigned char hash;       // 8-bit hash of the alias name
+} embeddedTzAlias_t;
+
 //! Declaration goes here!
 
 /**
@@ -49,18 +59,35 @@ static int tz_name_cmp(const char * target, const char * other) {
 }
 
 
-const char *tz_db_get_posix_str(const char *name) {
+const embeddedTz_t * tz_db_getTimezone(const char * name){
   unsigned char hash = createHash(name);
   
-  for(int i = 0; i < sizeof(embedded_tz_db_hashTable); i ++){
+  for(int i = 0; i < TZ_DB_NUM_ZONES; i ++){
     if(embedded_tz_db_hashTable[i] == hash){
       // Also do string comparison to check for hash collisions. 
       if(tz_name_cmp(name, embedded_tz_db_zones[i].name) == 0){
-        return embedded_tz_db_zones[i].rule;
+        return &embedded_tz_db_zones[i];
       }
     }
   }
-  return NULL;
+  #if TZ_DB_INCLUDE_ALIAS_LIST
+  for(int i = 0; i < TZ_DB_NUM_ALIAS; i ++){
+    if(embedded_tz_db_aliases[i].hash == hash){
+      // Also do string comparison to check for hash collisions. 
+      if(tz_name_cmp(name, embedded_tz_db_aliases[i].alias) == 0){
+        if(embedded_tz_db_aliases[i].zoneIndex < TZ_DB_NUM_ZONES) {
+          return &embedded_tz_db_zones[embedded_tz_db_aliases[i].zoneIndex];
+        }
+      }
+    }
+  }
+  #endif
+  return NULL;          // No match found
+}
+
+const char *tz_db_get_posix_str(const char *name) {
+  const embeddedTz_t * tz = tz_db_getTimezone(name);
+  return tz ? tz->rule : NULL;
 }
 
 const char * tz_db_get_version(){
