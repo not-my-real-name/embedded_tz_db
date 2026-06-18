@@ -7,7 +7,7 @@ namespace EmbeddedTimezoneDB
 {
     public static class EmbeddedTzDB
     {
-        public static readonly string IanaTzDatabaseVersion = "2025b-1";
+        public static readonly string IanaTzDatabaseVersion = "2026b-1";
 
         /// This dictionary contains only selected timezones and their POSIX rule definitions. 
         /// It is intended as a shorter list to make it simpler to select the correct zone.
@@ -72,7 +72,7 @@ namespace EmbeddedTimezoneDB
             {"Europe/Bucharest", "EET-2EEST,M3.5.0/3,M10.5.0/4"},
             {"Asia/Beirut", "EET-2EEST,M3.5.0/0,M10.5.0/0"},
             {"Africa/Cairo", "EET-2EEST,M4.5.5/0,M10.5.4/24"},
-            {"Europe/Chisinau", "EET-2EEST,M3.5.0,M10.5.0/3"},
+            {"Europe/Chisinau", "EET-2EEST,M3.5.0/3,M10.5.0/4"},
             {"Asia/Damascus", "<+03>-3"},
             {"Asia/Hebron", "EET-2EEST,M3.4.4/50,M10.4.4/50"},
             {"Africa/Johannesburg", "SAST-2"},
@@ -257,12 +257,12 @@ namespace EmbeddedTimezoneDB
             {"America/Edmonton", "MST7MDT,M3.2.0,M11.1.0"},
             {"America/Cambridge_Bay", "MST7MDT,M3.2.0,M11.1.0"},
             {"America/Inuvik", "MST7MDT,M3.2.0,M11.1.0"},
+            {"America/Vancouver", "MST7"},
             {"America/Creston", "MST7"},
             {"America/Dawson_Creek", "MST7"},
             {"America/Fort_Nelson", "MST7"},
             {"America/Whitehorse", "MST7"},
             {"America/Dawson", "MST7"},
-            {"America/Vancouver", "PST8PDT,M3.2.0,M11.1.0"},
             {"Indian/Cocos", "<+0630>-6:30"},
             {"Africa/Kinshasa", "WAT-1"},
             {"Africa/Lubumbashi", "CAT-2"},
@@ -388,7 +388,7 @@ namespace EmbeddedTimezoneDB
             {"Africa/Tripoli", "EET-2"},
             {"Africa/Casablanca", "<+01>-1"},
             {"Europe/Monaco", "CET-1CEST,M3.5.0,M10.5.0/3"},
-            {"Europe/Chisinau", "EET-2EEST,M3.5.0,M10.5.0/3"},
+            {"Europe/Chisinau", "EET-2EEST,M3.5.0/3,M10.5.0/4"},
             {"Europe/Podgorica", "CET-1CEST,M3.5.0,M10.5.0/3"},
             {"America/Marigot", "AST4"},
             {"Indian/Antananarivo", "EAT-3"},

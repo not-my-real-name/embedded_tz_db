@@ -11,7 +11,7 @@ typedef struct {
     unsigned char hash;       // 8-bit hash of the alias name
 } embeddedTzAlias_t;
 
-static const char * TZ_DATA_VERS = "2025b-1";
+static const char * TZ_DATA_VERS = "2026b-1";
 
 #if TZ_DB_USE_SHORT_LIST
 static const embeddedTz_t embedded_tz_db_zones[TZ_DB_NUM_ZONES] = {
@@ -74,7 +74,7 @@ static const embeddedTz_t embedded_tz_db_zones[TZ_DB_NUM_ZONES] = {
   {"Europe/Bucharest", "EET-2EEST,M3.5.0/3,M10.5.0/4"},
   {"Asia/Beirut", "EET-2EEST,M3.5.0/0,M10.5.0/0"},
   {"Africa/Cairo", "EET-2EEST,M4.5.5/0,M10.5.4/24"},
-  {"Europe/Chisinau", "EET-2EEST,M3.5.0,M10.5.0/3"},
+  {"Europe/Chisinau", "EET-2EEST,M3.5.0/3,M10.5.0/4"},
   {"Asia/Damascus", "<+03>-3"},
   {"Asia/Hebron", "EET-2EEST,M3.4.4/50,M10.4.4/50"},
   {"Africa/Johannesburg", "SAST-2"},
@@ -404,12 +404,12 @@ static const embeddedTz_t embedded_tz_db_zones[TZ_DB_NUM_ZONES] = {
   {"America/Edmonton", "MST7MDT,M3.2.0,M11.1.0"},
   {"America/Cambridge_Bay", "MST7MDT,M3.2.0,M11.1.0"},
   {"America/Inuvik", "MST7MDT,M3.2.0,M11.1.0"},
+  {"America/Vancouver", "MST7"},
   {"America/Creston", "MST7"},
   {"America/Dawson_Creek", "MST7"},
   {"America/Fort_Nelson", "MST7"},
   {"America/Whitehorse", "MST7"},
   {"America/Dawson", "MST7"},
-  {"America/Vancouver", "PST8PDT,M3.2.0,M11.1.0"},
   {"Indian/Cocos", "<+0630>-6:30"},
   {"Africa/Kinshasa", "WAT-1"},
   {"Africa/Lubumbashi", "CAT-2"},
@@ -535,7 +535,7 @@ static const embeddedTz_t embedded_tz_db_zones[TZ_DB_NUM_ZONES] = {
   {"Africa/Tripoli", "EET-2"},
   {"Africa/Casablanca", "<+01>-1"},
   {"Europe/Monaco", "CET-1CEST,M3.5.0,M10.5.0/3"},
-  {"Europe/Chisinau", "EET-2EEST,M3.5.0,M10.5.0/3"},
+  {"Europe/Chisinau", "EET-2EEST,M3.5.0/3,M10.5.0/4"},
   {"Europe/Podgorica", "CET-1CEST,M3.5.0,M10.5.0/3"},
   {"America/Marigot", "AST4"},
   {"Indian/Antananarivo", "EAT-3"},
@@ -837,12 +837,12 @@ static const unsigned char embedded_tz_db_hashTable[TZ_DB_NUM_ZONES] = {
   101,
   58,
   151,
+  218,
   255,
   246,
   170,
   67,
   141,
-  218,
   185,
   231,
   193,
@@ -1193,9 +1193,9 @@ static const embeddedTzAlias_t embedded_tz_db_aliases[TZ_DB_NUM_ALIAS] = {
   { "Canada/Eastern", 88, 121 },
   { "Canada/Mountain", 96, 242 },
   { "Canada/Newfoundland", 82, 140 },
-  { "Canada/Pacific", 104, 86 },
+  { "Canada/Pacific", 99, 86 },
   { "Canada/Saskatchewan", 94, 132 },
-  { "Canada/Yukon", 102, 189 },
+  { "Canada/Yukon", 103, 189 },
   { "Chile/Continental", 113, 211 },
   { "Chile/EasterIsland", 116, 51 },
   { "Cuba", 122, 155 },

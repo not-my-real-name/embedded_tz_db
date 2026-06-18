@@ -1,5 +1,5 @@
 //IANA time Zone database version used to generate this file.
-const embedded_tz_IanaDbVers = "2025b-1";
+const embedded_tz_IanaDbVers = "2026b-1";
 
 // Short List of selectable time zones for embedded devices
 const embedded_tz_db_shortNameList = [
@@ -339,7 +339,7 @@ const embedded_tz_db = {
     "America/Tijuana":"PST8PDT,M3.2.0,M11.1.0",
     "America/Toronto":"EST5EDT,M3.2.0,M11.1.0",
     "America/Tortola":"AST4",
-    "America/Vancouver":"PST8PDT,M3.2.0,M11.1.0",
+    "America/Vancouver":"MST7",
     "America/Whitehorse":"MST7",
     "America/Winnipeg":"CST6CDT,M3.2.0,M11.1.0",
     "America/Yakutat":"AKST9AKDT,M3.2.0,M11.1.0",
@@ -478,7 +478,7 @@ const embedded_tz_db = {
     "Europe/Bucharest":"EET-2EEST,M3.5.0/3,M10.5.0/4",
     "Europe/Budapest":"CET-1CEST,M3.5.0,M10.5.0/3",
     "Europe/Busingen":"CET-1CEST,M3.5.0,M10.5.0/3",
-    "Europe/Chisinau":"EET-2EEST,M3.5.0,M10.5.0/3",
+    "Europe/Chisinau":"EET-2EEST,M3.5.0/3,M10.5.0/4",
     "Europe/Copenhagen":"CET-1CEST,M3.5.0,M10.5.0/3",
     "Europe/Dublin":"IST-1GMT0,M10.5.0,M3.5.0/1",
     "Europe/Gibraltar":"CET-1CEST,M3.5.0,M10.5.0/3",

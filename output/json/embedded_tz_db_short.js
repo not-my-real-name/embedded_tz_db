@@ -1,5 +1,5 @@
 //IANA time Zone database version used to generate this file.
-const embedded_tz_IanaDbVers = "2025b-1";
+const embedded_tz_IanaDbVers = "2026b-1";
 
 // Short List of selectable time zones for embedded devices
 const embedded_tz_db_short = {
@@ -117,7 +117,7 @@ const embedded_tz_db_short = {
     "Europe/Berlin":"CET-1CEST,M3.5.0,M10.5.0/3",
     "Europe/Bucharest":"EET-2EEST,M3.5.0/3,M10.5.0/4",
     "Europe/Budapest":"CET-1CEST,M3.5.0,M10.5.0/3",
-    "Europe/Chisinau":"EET-2EEST,M3.5.0,M10.5.0/3",
+    "Europe/Chisinau":"EET-2EEST,M3.5.0/3,M10.5.0/4",
     "Europe/Istanbul":"<+03>-3",
     "Europe/Kaliningrad":"EET-2",
     "Europe/Kyiv":"EET-2EEST,M3.5.0/3,M10.5.0/4",

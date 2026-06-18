@@ -113,7 +113,7 @@
     "Europe/Berlin":"CET-1CEST,M3.5.0,M10.5.0/3",
     "Europe/Bucharest":"EET-2EEST,M3.5.0/3,M10.5.0/4",
     "Europe/Budapest":"CET-1CEST,M3.5.0,M10.5.0/3",
-    "Europe/Chisinau":"EET-2EEST,M3.5.0,M10.5.0/3",
+    "Europe/Chisinau":"EET-2EEST,M3.5.0/3,M10.5.0/4",
     "Europe/Istanbul":"<+03>-3",
     "Europe/Kaliningrad":"EET-2",
     "Europe/Kyiv":"EET-2EEST,M3.5.0/3,M10.5.0/4",
